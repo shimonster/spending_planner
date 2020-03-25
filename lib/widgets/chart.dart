@@ -46,26 +46,28 @@ class Chart extends StatelessWidget {
     print(dayTransactionInfo[0]['amount']);
     print(weekSpending);
     print((dayTransactionInfo[0]['amount'] as double) / weekSpending);
-    return Card(
-      elevation: 10,
-      margin: EdgeInsets.all(15),
-      child: Padding(
-        padding: EdgeInsets.all(10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: dayTransactionInfo.map((dayInfo) {
-            return Flexible(
-              fit: FlexFit.tight,
-              child: ChartBar(
-                dayInfo['day'],
-                dayInfo['amount'],
-                weekSpending == 0
-                    ? 0.0
-                    : (dayInfo['amount'] as double) / weekSpending,
-                weekSpending,
-              ),
-            );
-          }).toList(),
+    return Container(
+      child: Card(
+        elevation: 10,
+        margin: EdgeInsets.all(15),
+        child: Padding(
+          padding: EdgeInsets.all(10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: dayTransactionInfo.map((dayInfo) {
+              return Flexible(
+                fit: FlexFit.tight,
+                child: ChartBar(
+                  dayInfo['day'],
+                  dayInfo['amount'],
+                  weekSpending == 0
+                      ? 0.0
+                      : (dayInfo['amount'] as double) / weekSpending,
+                  weekSpending,
+                ),
+              );
+            }).toList(),
+          ),
         ),
       ),
     );

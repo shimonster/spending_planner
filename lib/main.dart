@@ -81,6 +81,8 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
+  bool _showChart = false;
+
   void _addTransaction(String title, double price, DateTime date) {
     final newTransaction = Transaction(
         title: title, price: price, date: date, id: '$title${date.toString()}');
@@ -95,8 +97,11 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void _editTransaction (String transactionId, TextEditingController newTitle, TextEditingController newPrice, DateTime newDate) {
-    var _whereMatchId = _transactionsMade.where((transaction) => transaction.id == transactionId).toList();
+  void _editTransaction(String transactionId, TextEditingController newTitle,
+      TextEditingController newPrice, DateTime newDate) {
+    var _whereMatchId = _transactionsMade
+        .where((transaction) => transaction.id == transactionId)
+        .toList();
     setState(() {
       _whereMatchId[0].title = newTitle.text;
       _whereMatchId[0].price = double.parse(newPrice.text);
@@ -107,23 +112,54 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final isLandscape  = MediaQuery.of(context).orientation == Orientation.landscape;
+    final appBar = AppBar(
+      title: Text('Spendings Planner'),
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.add_shopping_cart),
+          onPressed: () {
+            _showCreateInputs(context);
+          },
+        )
+      ],
+    );
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Spendings Planner'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.add_shopping_cart),
-            onPressed: () {
-              _showCreateInputs(context);
-            },
-          )
-        ],
-      ),
+      appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Chart(_weekTransactions),
-            TransactionCards(_transactionsMade, _deleteTransaction, _editTransaction),
+            if (isLandscape) Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text('Show Chart'),
+                Switch(
+                  value: _showChart,
+                  onChanged: (val) {
+                    setState(() {
+                      _showChart = val;
+                    });
+                  },
+                )
+              ],
+            ),
+            _showChart ?
+            Container(
+              height: (MediaQuery.of(context).size.height -
+                      appBar.preferredSize.height -
+                      MediaQuery.of(context).padding.top) *
+                  0.6,
+              child: Chart(_weekTransactions),
+            ) :
+            Container(
+              height: (MediaQuery.of(context).size.height -
+                      appBar.preferredSize.height -
+                      MediaQuery.of(context).padding.top) *
+                  0.8,
+              child: TransactionCards(
+                  _transactionsMade, _deleteTransaction, _editTransaction),
+            ),
           ],
         ),
       ),
