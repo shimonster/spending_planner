@@ -2,9 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import './transactionElements/showPrice.dart';
-import './transactionElements/showTransactionTitle.dart';
-import './transactionElements/showTransactionDate.dart';
 import '../models/transaction.dart';
 import './editTransaction.dart';
 
@@ -34,6 +31,7 @@ class TransactionCards extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
     return Container(
       child: transactionsMade.isEmpty
           ? LayoutBuilder(builder: (ctx, constraints) {
@@ -104,7 +102,7 @@ class TransactionCards extends StatelessWidget {
               ),
               trailing: FittedBox(
                 child: Row(
-                  children: <Widget>[
+                  children: mediaQuery.size.width < 600 ? <Widget> [
                     Container(),
                     Container(
                       margin: EdgeInsets.symmetric(
@@ -158,7 +156,64 @@ class TransactionCards extends StatelessWidget {
                         },
                       ),
                     ),
-                  ],
+                  ] :
+                      <Widget>[
+                        Container(),
+                        Container(
+                          margin: EdgeInsets.symmetric(
+                            horizontal: 5,
+                          ),
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.lightBlue,
+                                width: 3,
+                              ),
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(40))),
+                          child: FlatButton.icon(
+                            icon: Icon(
+                              Icons.create,
+                            ),
+                            label: Text('Edit'),
+                            textColor: Colors.blue,
+                            onPressed: () =>
+                                _showTransactionInfo(
+                                  context,
+                                  transactionsMade[index].title,
+                                  transactionsMade[index].price,
+                                  transactionsMade[index].date,
+                                  transactionsMade[index].id,
+                                  editTransaction,
+                                ),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.symmetric(
+                            horizontal: 5,
+                          ),
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Theme
+                                    .of(context)
+                                    .errorColor,
+                                width: 3,
+                              ),
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(40))),
+                          child: FlatButton.icon(
+                            icon: Icon(
+                              Icons.delete,
+                            ),
+                            textColor: Theme
+                                .of(context)
+                                .errorColor,
+                            label: Text('Delete'),
+                            onPressed: () {
+                              deleteTransaction(transactionsMade[index].id);
+                            },
+                          ),
+                        ),
+                      ]
                 ),
               ),
             ),

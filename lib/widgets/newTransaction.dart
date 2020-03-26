@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
+
+import './adaptiveFlatButton_IOS_Android.dart';
+
+
 
 class NewTransaction extends StatefulWidget {
   final Function addTransaction;
@@ -50,64 +55,66 @@ class _NewTransactionState extends State<NewTransaction> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      child: Container(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          children: <Widget>[
-            TextField(
-              decoration: InputDecoration(
-//                focusedBorder: OutlineInputBorder(
-//                  borderSide: BorderSide(color: Colors.lightBlueAccent)
-//                ),
-                labelStyle: TextStyle(color: Theme.of(context).accentColor),
-                labelText: 'Title',
-              ),
-              controller: titleController,
-              onSubmitted: (_) => _submitTransactionInfo(),
-            ),
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'Price',
-                labelStyle: TextStyle(color: Theme.of(context).accentColor),
-              ),
-              controller: priceController,
-              keyboardType: TextInputType.number,
-              onSubmitted: (_) => _submitTransactionInfo(),
-            ),
-            Container(
-              height: 70,
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Text(_chosenDate == null
-                        ? 'No Date Selected'
-                        : 'Date: ${DateFormat.yMd().format(_chosenDate)}'),
-                  ),
-                  FlatButton(
-                    child: Text(
-                      'Choose Date',
-                      style: TextStyle(
-                          color: Theme.of(context).accentColor,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    onPressed: _showDatePicker,
-                  )
-                ],
-              ),
-            ),
-            FlatButton(
-                child: Text(
-                  'Add Transaction',
-                  style: Theme.of(context).textTheme.button.copyWith(
-                        color: Theme.of(context).primaryColor,
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                      ),
+    return SingleChildScrollView(
+      child: Card(
+        elevation: 5,
+        child: Container(
+          padding: EdgeInsets.only(
+            top: 20,
+            right: 20,
+            left: 20,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+          ),
+          child: Column(
+            children: <Widget>[
+              TextField(
+                decoration: InputDecoration(
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.lightBlueAccent, width: 2)
                 ),
-                onPressed: _submitTransactionInfo),
-          ],
+                  labelStyle: TextStyle(color: Theme.of(context).accentColor),
+                  labelText: 'Title',
+                ),
+                controller: titleController,
+                onSubmitted: (_) => _submitTransactionInfo(),
+              ),
+              TextField(
+                decoration: InputDecoration(
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.lightBlueAccent, width: 2)
+                  ),
+                  labelText: 'Price',
+                  labelStyle: TextStyle(color: Theme.of(context).accentColor),
+                ),
+                controller: priceController,
+                keyboardType: TextInputType.number,
+                onSubmitted: (_) => _submitTransactionInfo(),
+              ),
+              Container(
+                height: 70,
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Text(_chosenDate == null
+                          ? 'No Date Selected'
+                          : 'Date: ${DateFormat.yMd().format(_chosenDate)}'),
+                    ),
+                    AdaptiveFlatButton('Select Date', _showDatePicker)
+                  ],
+                ),
+              ),
+              FlatButton(
+                      child: Text(
+                        'Add Transaction',
+                        style: Theme.of(context).textTheme.button.copyWith(
+                              color: Theme.of(context).primaryColor,
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                      onPressed: _submitTransactionInfo),
+            ],
+          ),
         ),
       ),
     );
