@@ -15,7 +15,6 @@ class TransactionThings extends StatelessWidget {
     return Column(
       children: <Widget>[
         NewTransaction(addTransaction),
-
       ],
     );
   }

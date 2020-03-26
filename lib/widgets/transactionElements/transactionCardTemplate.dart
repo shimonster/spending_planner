@@ -1,9 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:spendingplanner/models/transaction.dart';
 
-class TransactionCardTemplate extends StatelessWidget {
+class TransactionCardTemplate extends StatefulWidget {
   final Transaction transaction;
   final Function deleteTransaction;
   final Function editTransaction;
@@ -15,6 +17,24 @@ class TransactionCardTemplate extends StatelessWidget {
     this.editTransaction,
     this.showTransactionInfo,
   });
+
+  @override
+  _TransactionCardTemplateState createState() => _TransactionCardTemplateState();
+}
+
+class _TransactionCardTemplateState extends State<TransactionCardTemplate> {
+
+  Color _priceColor;
+
+
+  @override
+  void initState() {
+    const possibleColors = [Colors.blue, Colors.lightBlue, Colors.deepOrange, Colors.green];
+
+    _priceColor = possibleColors[Random().nextInt(5)];
+    super.initState();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -31,15 +51,15 @@ class TransactionCardTemplate extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(10)),
             border: Border.all(
               width: 5,
-              color: Theme.of(context).primaryColor,
+              color: _priceColor,
             ),
           ),
           child: Text(
-            '\$${transaction.price.toStringAsFixed(2)}',
+            '\$${widget.transaction.price.toStringAsFixed(2)}',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: Theme.of(context).primaryColor,
+              color: _priceColor,
             ),
           ),
         ),
@@ -48,13 +68,13 @@ class TransactionCardTemplate extends StatelessWidget {
           child: FittedBox(
             alignment: Alignment.centerLeft,
             child: Text(
-              transaction.title,
+              widget.transaction.title,
               style: Theme.of(context).textTheme.title,
             ),
           ),
         ),
         subtitle: Text(
-          DateFormat.yMMMd().format(transaction.date),
+          DateFormat.yMMMd().format(widget.transaction.date),
         ),
         trailing: FittedBox(
           child: Row(
@@ -77,13 +97,13 @@ class TransactionCardTemplate extends StatelessWidget {
                             Icons.create,
                             color: Colors.lightBlue,
                           ),
-                          onPressed: () => showTransactionInfo(
+                          onPressed: () => widget.showTransactionInfo(
                             context,
-                            transaction.title,
-                            transaction.price,
-                            transaction.date,
-                            transaction.id,
-                            editTransaction,
+                            widget.transaction.title,
+                            widget.transaction.price,
+                            widget.transaction.date,
+                            widget.transaction.id,
+                            widget.editTransaction,
                           ),
                         ),
                       ),
@@ -104,7 +124,7 @@ class TransactionCardTemplate extends StatelessWidget {
                             color: Theme.of(context).errorColor,
                           ),
                           onPressed: () {
-                            deleteTransaction(transaction.id);
+                            widget.deleteTransaction(widget.transaction.id);
                           },
                         ),
                       ),
@@ -128,13 +148,13 @@ class TransactionCardTemplate extends StatelessWidget {
                           ),
                           label: Text('Edit'),
                           textColor: Colors.blue,
-                          onPressed: () => showTransactionInfo(
+                          onPressed: () => widget.showTransactionInfo(
                             context,
-                            transaction.title,
-                            transaction.price,
-                            transaction.date,
-                            transaction.id,
-                            editTransaction,
+                            widget.transaction.title,
+                            widget.transaction.price,
+                            widget.transaction.date,
+                            widget.transaction.id,
+                            widget.editTransaction,
                           ),
                         ),
                       ),
@@ -156,7 +176,7 @@ class TransactionCardTemplate extends StatelessWidget {
                           textColor: Theme.of(context).errorColor,
                           label: Text('Delete'),
                           onPressed: () {
-                            deleteTransaction(transaction.id);
+                            widget.deleteTransaction(widget.transaction.id);
                           },
                         ),
                       ),

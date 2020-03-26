@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:js';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,10 +14,27 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
 
   bool _showChart = false;
   final List<Transaction> _transactionsMade = [];
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+  }
+
+  @override
+  dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
 
   void _showCreateInputs(BuildContext ctx) {
     showModalBottomSheet(
@@ -73,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   List<Widget> _buildLandscapeBody(
-      MediaQueryData mediaQuery, AppBar appBar, cards) {
+      MediaQueryData mediaQuery, AppBar appBar, cards, BuildContext context) {
     return [
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -118,7 +136,7 @@ class _MyHomePageState extends State<MyHomePage> {
     ];
   }
 
-  Widget _buildAndroidAppBar () {
+  Widget _buildAndroidAppBar (BuildContext context) {
     return AppBar(
       title: Text('Spendings Planner'),
       actions: <Widget>[
@@ -132,7 +150,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget _buildIOSAppBar () {
+  Widget _buildIOSAppBar (BuildContext context) {
     return CupertinoNavigationBar(
       middle: Text('Spendings Planner'),
       trailing: Row(
@@ -152,8 +170,8 @@ class _MyHomePageState extends State<MyHomePage> {
     final mediaQuery = MediaQuery.of(context);
     final isLandscape = mediaQuery.orientation == Orientation.landscape;
     final PreferredSizeWidget appBar = Platform.isIOS
-        ? _buildIOSAppBar()
-        : _buildAndroidAppBar();
+        ? _buildIOSAppBar(context)
+        : _buildAndroidAppBar(context);
     final cards = Container(
       height: (mediaQuery.size.height -
               appBar.preferredSize.height -
@@ -166,7 +184,7 @@ class _MyHomePageState extends State<MyHomePage> {
       child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            if (isLandscape) ..._buildLandscapeBody(mediaQuery, appBar, cards),
+            if (isLandscape) ..._buildLandscapeBody(mediaQuery, appBar, cards, context),
             if (!isLandscape) ..._buildPortraitBody(mediaQuery, appBar, cards),
           ],
         ),
