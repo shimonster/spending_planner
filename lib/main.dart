@@ -124,6 +124,14 @@ class _MyHomePageState extends State<MyHomePage> {
         )
       ],
     );
+    final cards = Container(
+      height: (MediaQuery.of(context).size.height -
+          appBar.preferredSize.height -
+          MediaQuery.of(context).padding.top) *
+          0.8,
+      child: TransactionCards(
+          _transactionsMade, _deleteTransaction, _editTransaction),
+    );
 
     return Scaffold(
       appBar: appBar,
@@ -141,9 +149,10 @@ class _MyHomePageState extends State<MyHomePage> {
                       _showChart = val;
                     });
                   },
-                )
+                ),
               ],
             ),
+            if(isLandscape)
             _showChart ?
             Container(
               height: (MediaQuery.of(context).size.height -
@@ -152,14 +161,20 @@ class _MyHomePageState extends State<MyHomePage> {
                   0.6,
               child: Chart(_weekTransactions),
             ) :
-            Container(
-              height: (MediaQuery.of(context).size.height -
-                      appBar.preferredSize.height -
-                      MediaQuery.of(context).padding.top) *
-                  0.8,
-              child: TransactionCards(
-                  _transactionsMade, _deleteTransaction, _editTransaction),
-            ),
+            cards,
+            if(!isLandscape)
+              Column(
+                children: <Widget>[
+                  Container(
+                    height: (MediaQuery.of(context).size.height -
+                        appBar.preferredSize.height -
+                        MediaQuery.of(context).padding.top) *
+                        0.3,
+                    child: Chart(_weekTransactions),
+                  ),
+                ],
+              ),
+              cards
           ],
         ),
       ),
