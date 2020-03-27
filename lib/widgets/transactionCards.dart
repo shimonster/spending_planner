@@ -51,6 +51,7 @@ class TransactionCards extends StatelessWidget {
           : ListView.builder(
               itemBuilder: (ctx, index) {
                 return TransactionCardTemplate(
+                  key: ValueKey(transactionsMade[index].id),
                   transaction: transactionsMade[index],
                   deleteTransaction: deleteTransaction,
                   editTransaction: editTransaction,

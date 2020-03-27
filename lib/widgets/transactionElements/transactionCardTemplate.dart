@@ -12,11 +12,12 @@ class TransactionCardTemplate extends StatefulWidget {
   final Function showTransactionInfo;
 
   TransactionCardTemplate({
+    Key key,
     this.transaction,
     this.deleteTransaction,
     this.editTransaction,
     this.showTransactionInfo,
-  });
+  }) : super(key: key);
 
   @override
   _TransactionCardTemplateState createState() => _TransactionCardTemplateState();
@@ -31,7 +32,7 @@ class _TransactionCardTemplateState extends State<TransactionCardTemplate> {
   void initState() {
     const possibleColors = [Colors.blue, Colors.lightBlue, Colors.deepOrange, Colors.green];
 
-    _priceColor = possibleColors[Random().nextInt(5)];
+    _priceColor = possibleColors[Random().nextInt(4)];
     super.initState();
   }
 

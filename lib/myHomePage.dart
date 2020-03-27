@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:js';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -65,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
 
   void _addTransaction(String title, double price, DateTime date) {
     final newTransaction = Transaction(
-        title: title, price: price, date: date, id: '$title${date.toString()}');
+        title: title, price: price, date: date, id: '$title$date');
     setState(() {
       _transactionsMade.add(newTransaction);
     });
